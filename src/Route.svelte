@@ -1,6 +1,6 @@
 <script>
   import { demandObject, suppressWarnings } from "./scripts.js";
-  import { options } from "generatedRoutes.js";
+  import { options } from "./store";
   export let url, route, routes;
   export let components = [];
   export let rootScope = {};
@@ -13,7 +13,7 @@
   $: props = Object.assign({ url, route, routes, scoped: Object.assign({}, rootScope )}, rootScope );
   $: childProps = { url, route, routes, rootScope, components: remainingComponents };
 
-  $: if (!options.unknownPropWarnings) suppressWarnings(Object.keys(props));
+  $: if (!$options.unknownPropWarnings) suppressWarnings(Object.keys(props));
 </script>
 
 {#await getComponent() then cmp}
