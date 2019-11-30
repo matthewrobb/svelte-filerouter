@@ -27,6 +27,8 @@ export function listen(fn) {
     history.pushState({}, '', href)
   }
 
+  fn();
+
   return ()=> {
     removeEventListener('popstate', fn);
     removeEventListener('replacestate', fn);

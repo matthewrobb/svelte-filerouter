@@ -6,9 +6,18 @@ export const routes = writable()
 export const pages = derived(routes, routes => routes.filter(route => !route.isFallback))
 export const fallbacks = derived(routes, routes => routes.filter(route => route.isFallback))
 
-export const pathname = readable(window.location.pathname, set => (
-  listen(()=> set(window.location.pathname))
-));
+export const pathname = readable(window.location.pathname, set => {
+  return listen(()=> {
+    const { pathname } = window.location;
+
+    if (pathname !== '/' && /\/$/.test(pathname)) {
+      history.replaceState(history.state, '', pathname.replace(/\/$/, ''));
+      return;
+    }
+
+    set(window.location.pathname);
+  });
+});
 
 export const route = derived(
   [ pages, fallbacks, pathname ],
@@ -20,7 +29,7 @@ export const route = derived(
     let route =
         pages.filter(route => urlWithIndex.match(route.regex))[0]
         || pages.filter(route => pathname.match(route.regex))[0]
-        || fallbacks.filter(route => pathname.match(route.regex))[0]
+        || fallbacks.filter(route => pathname.match(route.regex))[0];
 
     if (!route) throw new Error(
       `Route could not be found. Make sure ${pathname}.svelte or ${pathname}/index.svelte exists. A restart may be required.`
