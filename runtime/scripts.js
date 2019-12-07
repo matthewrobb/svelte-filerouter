@@ -23,10 +23,10 @@ export const suppressWarnings = (function () {
 })()
 
 export const demandObject = function (obj) {
-    const isObj = Object.prototype.toString.call(obj) === "[object Object]";
-    if (isObj || !obj) return true;
+    const isObj = Object.prototype.toString.call(obj) === "[object Object]"
+    if (isObj || !obj) return true
     else
         throw new Error(
             `"${obj}" is not an object. "scoped" prop must an object`
-        );
+        )
 }

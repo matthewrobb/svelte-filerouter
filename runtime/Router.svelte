@@ -2,17 +2,17 @@
   import * as stores from './store'
   import RoutifyContext from "./context.js"
   import { matchRoute } from '../helpers.js'
-  import Route from "./Route.svelte";
+  import Route from "./Route.svelte"
   
   export const router = new RoutifyContext({ component: 'Root' })
   export let pathname = window.location.pathname
   export let routes
-	
-	$: match   = matchRoute(routes, pathname)
-	$: route   = { ...match.route, params: match.params }
-	$: layouts = [ ...route.layouts, route ]
+
+  $: match   = matchRoute(routes, pathname)
+  $: route   = { ...match.route, params: match.params }
+  $: layouts = [ ...route.layouts, route ]
   $: $router = { route, layouts, routes }
-  
+
   $: stores.route.set(route)
 
   function handleHistory() {
