@@ -8,9 +8,11 @@
   export let pathname = window.location.pathname
   export let routes
 
+  let match, route, layouts
+
   $: match   = matchRoute(routes, pathname)
-  $: route   = { ...match.route, params: match.params }
-  $: layouts = [ ...route.layouts, route ]
+  $: if (match) route   = { ...match.route, params: match.params }
+  $: if (route) layouts = [ ...route.layouts, route ]
   $: $router = { route, layouts, routes }
 
   $: stores.route.set(route)
@@ -19,8 +21,9 @@
     pathname = window.location.pathname
   }
 </script>
-
-<Route {layouts} />
+{#if routes && route && layouts}
+  <Route {layouts} />
+{/if}
 
 <svelte:window
   on:click={handleClick}

@@ -2,7 +2,7 @@ export function url(path, params, route, routes) {
   if (path.match(/^\.\.?\//)) {
     //RELATIVE PATH
     // get component's dir
-    let dir = route.component.path.replace(/[^\/]+$/, '')
+    let dir = route.path.replace(/[^\/]+$/, '')
 
     // traverse through parents if needed
     const traverse = path.match(/\.\.\//g)
@@ -32,6 +32,8 @@ export function url(path, params, route, routes) {
 }
 
 export function matchRoute(routes, url) {
+  if (!routes) return
+
   const urlWithIndex = url.match(/\/index\/?$/) ? url : (
     (url + "/index").replace(/\/+/g, "/") //remove duplicate slashes
   )

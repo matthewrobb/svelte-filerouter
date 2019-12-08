@@ -10,17 +10,21 @@
   export let layouts = undefined
   export let scopeFromParent = undefined
 
-  let scopeToChild
+  let scopeToChild, scoped, current, remainingLayouts
 
   $: scoped = { ...scopeFromParent, ...scopeToChild }
-  $: [current, ...remainingLayouts] = layouts
+  $: if (layouts) [current, ...remainingLayouts] = layouts
   $: $route.component = current
+
+  $: console.log(route);
 </script>
 
-<svelte:component this={current.component()} let:scoped={scopeToChild} {scoped}>
-  {#if remainingLayouts.length}
-    <svelte:self
-      layouts={remainingLayouts}
-      scopeFromParent={{ ...scopeFromParent, ...scopeToChild }} />
-  {/if}
-</svelte:component>
+{#if current}
+  <svelte:component this={current.component()} let:scoped={scopeToChild} {scoped} route={$route.root.route}>
+    {#if remainingLayouts.length}
+      <svelte:self
+        layouts={remainingLayouts}
+        scopeFromParent={{ ...scopeFromParent, ...scopeToChild }} />
+    {/if}
+  </svelte:component>
+{/if}
